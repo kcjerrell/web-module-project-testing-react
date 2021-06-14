@@ -5,13 +5,12 @@ import userEvent from '@testing-library/user-event';
 import Show from './../Show';
 
 import { testEpisode } from './Episode.test';
-import Episode from '../Episode';
 
 //Tasks:
 //1. Build an example data structure that contains the show data in the correct format. A show should contain a name,
 //   a summary and an array of seasons, each with a id, name and(empty) list of episodes within them.Use console.logs
 //   within the client code if you need to to verify the structure of show data.
-const testShow = {
+export const testShow = {
     name: "A Real Show",
     image: "probablyNotARealPicture.jpg",
     summary: "You know, that show where the guy and stuff and things",

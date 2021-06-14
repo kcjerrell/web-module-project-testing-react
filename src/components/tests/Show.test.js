@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import Show from './../Show';
 
 import { testEpisode } from './Episode.test';
+import Episode from '../Episode';
 
 //Tasks:
 //1. Build an example data structure that contains the show data in the correct format. A show should contain a name,
@@ -80,6 +81,15 @@ test('handleSelect is called when an season is selected', () => {
 //6. Test that the episode component DOES NOT render when the selectedSeason props is "none" and DOES render the
 //    episode component when the selectedSeason prop has a valid season index.
 test('component renders when no seasons are selected and when rerenders with a season passed in', () => {
-    render(<Show show={testShow} selectedSeason="none" />);
+    const { rerender } = render(<Show show={testShow} selectedSeason="none" />);
+
+    const episodesA = screen.queryByTestId('episodes-container');
+    expect(episodesA).toBeNull();
+
+    rerender(<Show show={testShow} selectedSeason={1} />)
+
+    const episodesB = screen.queryByTestId('episodes-container');
+    expect(episodesB).toBeInTheDocument();
+    expect(episodesB).toBeVisible();
 
 });

@@ -1,16 +1,59 @@
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
+import Display from '../Display';
+import { testShow } from './Show.test';
+import fetchShow from '../../api/fetchShow';
+jest.mock('../../api/fetchShow');
 
 
+test('renders without error', () => {
+	render(<Display />);
+})
 
 
+test('when fetch button is pressed, the show component displays', async () => {
+	render(<Display />);
+
+	const show = screen.queryByTestId("show-container");
+	expect(show).toBeNull();
+
+	fetchShow.mockResolvedValueOnce(testShow);
+
+	const fetchButton = screen.getByRole("button");
+	expect(fetchButton).toBeVisible();
+	userEvent.click(fetchButton);
+
+	await waitFor(() => {
+		const show = screen.queryByTestId("show-container");
+		expect(show).toBeVisible();
+	})
+
+	const options = screen.getByLabelText(/select a season/i);
+	expect(options).toBeVisible();
+	expect(options).toHaveLength(testShow.seasons.length + 1);
+});
 
 
+test("displayFunc callBack is called when fetch show button is clicked", async () => {
+	const displayFunc = jest.fn();
 
+	render(<Display displayFunc={displayFunc} />);
 
+	fetchShow.mockResolvedValueOnce(testShow);
 
+	const fetchButton = screen.getByRole("button");
 
+	expect(displayFunc).not.toHaveBeenCalled();
+	userEvent.click(fetchButton);
+	await waitFor(() => {
+		const show = screen.queryByTestId("show-container");
+		expect(show).toBeVisible();
+	})
 
-
-
+	expect(displayFunc).toHaveBeenCalled();
+});
 
 
 ///Tasks:
